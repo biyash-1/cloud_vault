@@ -17,11 +17,12 @@ export default function SignupPage() {
     const password = (form.elements.namedItem("password") as HTMLInputElement).value;
 
     try {
-      const user = await createAccount(fullName, emailValue);
-      console.log("User created successfully:", user);
+      // ✅ createAccount expects an object
+      const accountId = await createAccount({ fullName, email: emailValue });
 
-      // ✅ Appwrite user ID stored as accountId
-      setAccountId(user?.accountId || null);
+      if (!accountId) throw new Error("Failed to create account.");
+
+      setAccountId(accountId); // ✅ set accountId for OTP modal
       setEmail(emailValue);
 
       alert("Signup successful! Please check your email for OTP verification.");
@@ -33,9 +34,7 @@ export default function SignupPage() {
 
   return (
     <div className="bg-white border border-gray-200 shadow-lg rounded-2xl w-full max-w-md p-10">
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">
-        Create your account
-      </h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">Create your account</h1>
       <p className="text-sm text-gray-500 mb-6">
         Join CloudVault today and keep your files safe in the cloud.
       </p>
@@ -91,12 +90,12 @@ export default function SignupPage() {
         </button>
       </form>
 
-      {/* ✅ OTP Modal appears after signup */}
+      {/* ✅ Show OTP modal once accountId is available */}
       {accountId && <OtpModel email={email} accountId={accountId} />}
 
       <p className="text-sm text-center text-gray-600 mt-6">
         Already have an account?{" "}
-        <a href="/login" className="text-amber-600 font-medium hover:underline">
+        <a href="/sign-in" className="text-amber-600 font-medium hover:underline">
           Log in
         </a>
       </p>
