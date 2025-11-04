@@ -3,8 +3,8 @@ import Image from "next/image";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side */}
+    <div className="min-h-screen w-screen flex m-0 p-0 overflow-hidden">
+      {/* Left Section */}
       <section className="hidden md:flex w-1/3.5 bg-amber-600 text-white flex-col justify-center items-center p-16 relative overflow-hidden">
         <div className="text-center z-10 max-w-md">
           <h1 className="text-5xl font-extrabold mb-4 leading-tight">
@@ -32,7 +32,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-300 opacity-20 rounded-full translate-x-1/2 -translate-y-1/2"></div>
       </section>
 
-      {/* Right Side */}
+      {/* Right Section */}
       <section className="flex flex-1 items-center justify-center bg-gradient-to-br from-white to-amber-50 p-10">
         {children}
       </section>
