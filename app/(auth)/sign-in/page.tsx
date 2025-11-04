@@ -80,8 +80,7 @@ const SignInPage = () => {
           Sign up
         </a>
       </p>
-
-      {/* ✅ OTP modal */}
+      
       {accountId && <OtpModel email={emailState} accountId={accountId} />}
     </div>
   );
