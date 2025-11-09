@@ -24,9 +24,9 @@ const Sidebar = ({ user }: SidebarProps) => {
   const navItems = [
     { name: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
     { name: "Documents", icon: FileText, href: "/dashboard/documents" },
-    { name: "Images", icon: Image, href: "/images" },
-    { name: "Media", icon: PlaySquare, href: "/media" },
-    { name: "Others", icon: MoreHorizontal, href: "/others" },
+    { name: "Images", icon: Image, href: "/dashboard/images" },
+    { name: "media", icon: PlaySquare, href: "/dashboard/media" },
+    { name: "Others", icon: MoreHorizontal, href: "/dashboard/others" },
   ];
 
   const fullName = user?.username || "Guest User";
