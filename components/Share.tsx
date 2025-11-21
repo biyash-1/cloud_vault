@@ -5,14 +5,26 @@ import React from "react";
 import { Button } from "./ui/button";
 import { TiDelete } from "react-icons/ti";
 
+// Define a proper type for your file
+export interface FileDocument extends Models.Document {
+  name: string;
+  type: string;       // file type like "image", "video"
+  mimeType?: string;  // optional mimeType
+  url: string;
+  extension: string;
+  size: number;
+  users: string[];
+  folderId?: string;
+}
+
 interface Props {
-  file: Models.Document;
+  file: FileDocument;
   onInputChange: React.Dispatch<React.SetStateAction<string[]>>;
   onRemove: (email: string) => void;
 }
 
 interface FileDetailsProps {
-  file: Models.Document;
+  file: FileDocument;
 }
 
 const ImageThumbnail = ({ file }: FileDetailsProps) => {
@@ -21,14 +33,14 @@ const ImageThumbnail = ({ file }: FileDetailsProps) => {
       <Thumbnail
         type={file.mimeType || file.type}
         extension={file.extension}
-        url={file?.url}
+        url={file.url}
       />
       <div className="mt-2">
         <p className="text-base font-medium text-gray-900 dark:text-gray-100">
-          {file?.name}
+          {file.name}
         </p>
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          {new Date(file?.$createdAt).toLocaleString()}
+          {new Date(file.$createdAt).toLocaleString()}
         </p>
       </div>
     </div>
@@ -45,30 +57,32 @@ const Share = ({ file, onInputChange, onRemove }: Props) => {
         <Input
           type="email"
           placeholder="Enter email address"
-          onChange={(e: any) => onInputChange(e.target.value.trim().split(","))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onInputChange(e.target.value.trim().split(","))
+          }
           className="share-input"
         />
 
         <div className="pt-4">
           <div className="flex justify-between mb-1">
             <p className="subtitle-2 text-gray">Shared with</p>
-            <p className="subtitle-2 text-gray">
-              {file?.users?.length || 0}
-            </p>
+            <p className="subtitle-2 text-gray">{file.users.length}</p>
           </div>
 
           <ul className="pt-2 border rounded-xl divide-y">
             {file.users.length === 0 && (
-              <p className="text-sm text-gray-500 p-2">No users shared yet.</p>
+              <p className="text-sm text-gray-500 p-2">
+                No users shared yet.
+              </p>
             )}
-            {file?.users?.map((email: any) => (
+            {file.users.map((email) => (
               <li
                 key={email}
                 className="flex items-center justify-between px-2 py-1"
               >
                 <p className="text-sm truncate">{email}</p>
                 <TiDelete
-                  size={26} 
+                  size={26}
                   className="text-red-500 hover:text-red-600 cursor-pointer"
                   onClick={() => onRemove(email)}
                 />

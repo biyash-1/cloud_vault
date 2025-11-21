@@ -10,14 +10,23 @@ import { useDebounce } from 'use-debounce';
 interface SearchProps {
   placeholder?: string;
   onSearch?: (value: string) => void;
+ 
 }
+export interface FileDocument extends Models.Document {
+  name: string;
+  type: string;
+  mimeType?: string;
+  url: string;
+  extension: string;
+}
+
 
 export default function Search({
   placeholder = "Search...",
   onSearch,
 }: SearchProps) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<FileDocument[]>([]);
   const [open, setOpen] = useState(false);
   const [debouncedQuery] = useDebounce(query,300)
 
@@ -28,7 +37,7 @@ export default function Search({
 
   useEffect(() => {
     const fetchFiles = async () => {
-      // ✅ If query is empty → close dropdown and clear results
+    
       if (debouncedQuery.length===0) {
         setResults([]);
         setOpen(false);
@@ -64,7 +73,7 @@ export default function Search({
     if (onSearch) onSearch(value);
   };
 
-  const handleClickItem = (file: Models.Document) => {
+  const handleClickItem = (file: FileDocument) => {
     setResults([]);
     setOpen(false);
  

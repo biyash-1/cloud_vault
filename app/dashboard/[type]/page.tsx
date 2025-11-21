@@ -1,3 +1,5 @@
+
+
 import Sort from "@/components/Sort";
 import {
   getFiles,
@@ -7,7 +9,7 @@ import {
 import Card from "@/components/Card";
 import { getFileTypeParams, convertFileSize } from "@/lib/utils";
 import Link from "next/link";
-import { Models } from "node-appwrite";
+import { FolderDocument, FileDocument } from "@/app/actions/file.action";
 
 import FolderCreationWrapper from "@/components/FolderCreationWrapper";
 import FolderMenu from "@/components/FolderMenu";
@@ -17,41 +19,56 @@ type PageProps = {
   searchParams?: Promise<{ query?: string; sort?: string }>;
 };
 
+type TotalSpaceKey = "image" | "document" | "video" | "audio" | "other";
 
-const typeMap: Record<string, string> = {
+type TotalSpaceUsed = {
+  image: { size: number; latestDate: string };
+  document: { size: number; latestDate: string };
+  video: { size: number; latestDate: string };
+  audio: { size: number; latestDate: string };
+  other: { size: number; latestDate: string };
+  used: number;
+  all: number;
+};
+
+type FolderListResponse = {
+  total: number;
+  documents: FolderDocument[];
+};
+
+type FileListResponse = {
+  total: number;
+  documents: FileDocument[];
+};
+
+const typeMap: Record<string, TotalSpaceKey> = {
   images: "image",
   videos: "video",
   documents: "document",
   audios: "audio",
   others: "other",
 };
-type TotalSpaceKey = "image" | "document" | "video" | "audio" | "other";
-
-
 
 const Page = async ({ searchParams, params }: PageProps) => {
-  const type = (await params)?.type as string;
-  const totalSpaceUsed = await getTotalSpaceUsed();
-  console.log("totalSpaceUsed", totalSpaceUsed);
+  const type = (await params)?.type;
+  const totalSpaceUsed: TotalSpaceUsed | undefined = await getTotalSpaceUsed();
 
   const searchText = ((await searchParams)?.query as string) || "";
   const sort = ((await searchParams)?.sort as string) || "";
 
   const fileType = getFileTypeParams(type);
-  const files = await getFiles({ type: fileType, sort, folderId: undefined });
-  const folders = await getFolders(type);
-  console.log("folders", folders);
+  const files: FileListResponse = await getFiles({ type: fileType, sort, folderId: undefined });
+  const folders: FolderListResponse = await getFolders(type);
 
   // ---- FIXED KEY MAPPING LOGIC ----
-const safeKey = (typeMap[type] || type) as TotalSpaceKey;// convert plural → singular
+  const safeKey: TotalSpaceKey = typeMap[type] || "other";
   let totalSize = 0;
 
   if (type === "media") {
     totalSize =
       (totalSpaceUsed?.audio?.size || 0) + (totalSpaceUsed?.video?.size || 0);
-  } else {
-    const safeKey = typeMap[type] || type;
-    totalSize = totalSpaceUsed?.[safeKey]?.size || 0;
+  } else if (totalSpaceUsed && safeKey in totalSpaceUsed) {
+    totalSize = totalSpaceUsed[safeKey]?.size || 0;
   }
 
   return (
@@ -63,46 +80,35 @@ const safeKey = (typeMap[type] || type) as TotalSpaceKey;// convert plural → s
           <p className="text-xs text-gray-600">
             Total: <span>{convertFileSize(totalSize)}</span>
           </p>
-    
 
+          <div className="flex gap-2 items-center mt-2">
+            <FolderCreationWrapper path={type} />
 
-          <div className="flex gap-2 items-center mt-2 ">
-          <FolderCreationWrapper path={type} />
-        
             <p className="text-sm text-gray-500">Sort by</p>
             <Sort />
           </div>
         </div>
       </section>
+
       <div className="for folder">
         {folders.total > 0 ? (
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6 my-6">
             {folders.documents.map((folder) => (
-              // 👇 KEY CHANGE: Wrap in a div with relative positioning
-              <div 
-                key={folder.$id} 
+              <div
+                key={folder.$id}
                 className="flex flex-col items-center group relative"
               >
-                {/* Link only wraps the clickable folder content */}
-                <Link 
+                <Link
                   href={`/dashboard/${type}/folder/${folder.$id}`}
                   className="flex flex-col items-center cursor-pointer w-full"
                 >
-                  {/* Folder Icon */}
-                  <div className="text-5xl group-hover:scale-105 transition">
-                    📁
-                  </div>
-
-                  {/* Folder Name */}
+                  <div className="text-5xl group-hover:scale-105 transition">📁</div>
                   <p className="text-xs text-center mt-1 truncate w-20 group-hover:text-blue-600">
                     {folder.name}
                   </p>
                 </Link>
-             
-                <FolderMenu 
-                  folderId={folder.$id}
-                  folderName={folder.name}
-                />
+
+                <FolderMenu folderId={folder.$id} folderName={folder.name} />
               </div>
             ))}
           </div>
@@ -112,17 +118,7 @@ const safeKey = (typeMap[type] || type) as TotalSpaceKey;// convert plural → s
       </div>
 
       {files.total > 0 ? (
-        <section
-          className="
-            grid 
-            grid-cols-1
-            sm:grid-cols-2
-            md:grid-cols-3
-            lg:grid-cols-4  
-            xl:grid-cols-5
-            gap-6
-          "
-        >
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {files.documents.map((file) => (
             <Card key={file.$id} file={file} />
           ))}

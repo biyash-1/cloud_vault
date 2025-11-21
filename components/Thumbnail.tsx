@@ -6,6 +6,7 @@ interface Props {
   type?: string;
   extension?: string;
   url?: string;
+   className?: string;
 }
 
 const Thumbnail = ({ type = "", extension = "", url = "" }: Props) => {

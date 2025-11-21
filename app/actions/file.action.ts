@@ -24,6 +24,7 @@ interface RenRenameFilePropsme {
   name: string;
   extension: string;
   path: string;
+  emails?: string[];  
 }
 
 interface RemoveUserProps {
@@ -187,26 +188,47 @@ const createQueries = (
   return queries;
 };
 
-export const getFiles = async ({type  =[],searchText="", sort='$createdAt-desc',limit='',folderId}:GetFileTypeProp):Promise<FileListResponse> => {
+export const getFiles = async ({
+  type = [],
+  searchText = "",
+  sort = "$createdAt-desc",
+  limit = "",
+  folderId,
+}: GetFileTypeProp): Promise<FileListResponse> => {
   try {
     const { databases } = await createAdminClient();
     const currentUser = await getCurrentUser();
     if (!currentUser) throw new Error("user not found");
-    const queries = createQueries(currentUser,type,searchText,sort,limit,folderId);
-        console.log("🔍 DEBUG - Folder ID:", folderId);
-    console.log("🔍 DEBUG - All queries:", queries);
+
+    const queries = createQueries(currentUser, type, searchText, sort, limit, folderId);
+
     const files = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.fileCollectionId,
       queries
     );
 
-    return parseStringify(files) ;
+    // Map documents to FileDocument type
+    const fileDocs: FileDocument[] = files.documents.map((doc) => ({
+      ...doc,
+      name: doc.name || "Untitled File",
+      type: doc.type || "other",
+      size: doc.size || 0,
+      url: doc.url || "",
+      extension: doc.extension || "",
+      owner: doc.owner || currentUser.$id,
+    }));
+
+    return {
+      ...files,
+      documents: fileDocs,
+    } as FileListResponse;
   } catch (error) {
-  console.error("❌ Failed to fetch user files:", error);
+    console.error("❌ Failed to fetch user files:", error);
     return { total: 0, documents: [] } as FileListResponse;
   }
 };
+
 
 export const renameFile = async ({
   fileId,
@@ -327,29 +349,44 @@ export const removeUser = async ({ fileId, email, path }: RemoveUserProps) => {
 // Remove unnecessary revalidate function as we're using revalidatePath
 
 
-export async function getTotalSpaceUsed() {
+export type CategoryKey = "image" | "document" | "video" | "audio" | "other";
+
+export type CategorySpace = {
+  [K in CategoryKey]: { size: number; latestDate: string };
+};
+
+export type TotalSpace = CategorySpace & {
+  used: number;
+  all: number;
+  return?: void;
+};
+
+export async function getTotalSpaceUsed(): Promise<TotalSpace> {
   try {
     const { databases } = await createSessionedClient();
     const currentUser = await getCurrentUser();
     if (!currentUser) throw new Error("User is not authenticated.");
 
+    // Fetch all files of the current user
     const files = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.fileCollectionId,
       [Query.equal("owner", [currentUser.$id])]
     );
 
-    const totalSpace = {
+    // Initialize total space object
+    const totalSpace: TotalSpace = {
       image: { size: 0, latestDate: "" },
       document: { size: 0, latestDate: "" },
       video: { size: 0, latestDate: "" },
       audio: { size: 0, latestDate: "" },
       other: { size: 0, latestDate: "" },
       used: 0,
-      all: 2 * 1024 * 1024 * 1024,
+      all: 2 * 1024 * 1024 * 1024, // 2GB quota
     };
 
-    const categoryMap: Record<string, keyof typeof totalSpace> = {
+    // Map Appwrite file types to category keys
+    const categoryMap: Record<string, CategoryKey> = {
       image: "image",
       img: "image",
       picture: "image",
@@ -369,24 +406,25 @@ export async function getTotalSpaceUsed() {
       other: "other",
     };
 
+    // Process each file
     files.documents.forEach((file) => {
       const fileType = (file.type || "other").toLowerCase();
-      const key = categoryMap[fileType] || "other";
+      const key: CategoryKey = categoryMap[fileType] || "other";
 
+      // Accumulate size
       totalSpace[key].size += file.size;
       totalSpace.used += file.size;
 
-      if (
-        !totalSpace[key].latestDate ||
-        new Date(file.$updatedAt) > new Date(totalSpace[key].latestDate)
-      ) {
+      // Update latestDate
+      if (!totalSpace[key].latestDate || new Date(file.$updatedAt) > new Date(totalSpace[key].latestDate)) {
         totalSpace[key].latestDate = file.$updatedAt;
       }
     });
 
     return parseStringify(totalSpace);
-  } catch (error) {
-    handleError(error, "Error calculating total space used:");
+  } catch (error:any) {
+    console.error("❌ Error calculating total space used:", error.message);
+    throw error;
   }
 }
 
@@ -400,14 +438,19 @@ export const createFolder = async ({ name, path }: { name: string, path?: string
     if (!currentUser) throw new Error("No user logged in");
 
     // Check duplicate folder for same user & same type
+    const queries = [
+      Query.equal("owner", currentUser.$id),
+      Query.equal("name", name),
+    ];
+    
+    if (path) {
+      queries.push(Query.equal("type", path));
+    }
+    
     const existingFolders = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.folderCollectionId,
-      [
-        Query.equal("owner", currentUser.$id),
-        Query.equal("name", name),
-        Query.equal("type", path),   // <— IMPORTANT (same section only)
-      ]
+      queries
     );
 
     if (existingFolders.total > 0) {
@@ -459,7 +502,7 @@ export const deleteFolder = async (folderId: string) => {
 
 
 
-export const getFolders = async (type: string) :Promise<FolderListResponse> => {
+export const getFolders = async (type: string): Promise<FolderListResponse> => {
   try {
     const { databases } = await createAdminClient();
     const currentUser = await getCurrentUser();
@@ -470,16 +513,26 @@ export const getFolders = async (type: string) :Promise<FolderListResponse> => {
       appwriteConfig.folderCollectionId,
       [
         Query.equal("owner", currentUser.$id),
-      Query.equal("type", type),  // filter by section
+        Query.equal("type", type),
       ]
     );
 
-    return parseStringify(folders);
+    // Map documents to FolderDocument type
+    const folderDocs: FolderDocument[] = folders.documents.map((doc) => ({
+      ...doc,
+      name: doc.name || "Untitled Folder", // Ensure `name` exists
+    }));
+
+    return {
+      ...folders,
+      documents: folderDocs,
+    } as FolderListResponse;
   } catch (error) {
     console.error("Failed to fetch folders:", error);
-    return { total: 0, documents: [] };
+    return { total: 0, documents: [] } as FolderListResponse;
   }
 };
+
 
 
 export const moveFile = async ({
