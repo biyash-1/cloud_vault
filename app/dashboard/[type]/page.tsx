@@ -1,4 +1,5 @@
 
+export const dynamic = "force-dynamic";
 
 import Sort from "@/components/Sort";
 import {
@@ -9,7 +10,7 @@ import {
 import Card from "@/components/Card";
 import { getFileTypeParams, convertFileSize } from "@/lib/utils";
 import Link from "next/link";
-import { FolderDocument, FileDocument } from "@/app/actions/file.action";
+import { FileDocument,FolderDocument } from "@/app/actions/file.action";
 
 import FolderCreationWrapper from "@/components/FolderCreationWrapper";
 import FolderMenu from "@/components/FolderMenu";
@@ -49,6 +50,10 @@ const typeMap: Record<string, TotalSpaceKey> = {
   others: "other",
 };
 
+interface fileProp {
+  file:FileDocument
+}
+
 const Page = async ({ searchParams, params }: PageProps) => {
   const type = (await params)?.type;
   const totalSpaceUsed: TotalSpaceUsed | undefined = await getTotalSpaceUsed();
@@ -57,8 +62,8 @@ const Page = async ({ searchParams, params }: PageProps) => {
   const sort = ((await searchParams)?.sort as string) || "";
 
   const fileType = getFileTypeParams(type);
-  const files: FileListResponse = await getFiles({ type: fileType, sort, folderId: undefined });
-  const folders: FolderListResponse = await getFolders(type);
+  const files = await getFiles({ type: fileType, sort, folderId: undefined });
+  const folders= await getFolders(type);
 
   // ---- FIXED KEY MAPPING LOGIC ----
   const safeKey: TotalSpaceKey = typeMap[type] || "other";
@@ -119,9 +124,11 @@ const Page = async ({ searchParams, params }: PageProps) => {
 
       {files.total > 0 ? (
         <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {files.documents.map((file) => (
-            <Card key={file.$id} file={file} />
-          ))}
+       {files.documents.map((file: FileDocument) => (
+  <Card key={file.$id} file={file} />
+))}
+
+
         </section>
       ) : (
         <p className="text-gray-500 mt-10">No files found</p>

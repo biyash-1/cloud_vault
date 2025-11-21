@@ -4,11 +4,14 @@ import { useState, useTransition } from "react";
 import { LogOut } from "lucide-react";
 import { logoutUser } from "@/app/actions/user.action";
 import FileUploader from "./FileUploader";
-import Search from "./Search"; // <-- import the new component
+import Search from "./Search"; 
+import { usePathname } from "next/navigation";
 
 export default function Header({ userId, accountId }: { userId: string; accountId: string }) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+   const pathname = usePathname();
+  const path = pathname?.split("/").pop() || "files";
 
   const handleLogout = () => {
     startTransition(async () => {
@@ -25,7 +28,7 @@ export default function Header({ userId, accountId }: { userId: string; accountI
 
         {/* Right Side Buttons */}
         <div className="flex items-center gap-3">
-          <FileUploader ownerId={userId} accountId={accountId} />
+          <FileUploader path= {path} ownerId={userId} accountId={accountId} />
 
      <button
   onClick={handleLogout}

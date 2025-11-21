@@ -2,13 +2,23 @@ import { Models } from 'node-appwrite'
 import React from 'react'
 import Thumbnail from './Thumbnail'
 import { Button } from './ui/button';
-interface FileDetailsProps{
-    file: Models.Document
-    
+export interface FileDocument extends Models.Document {
+  name: string;
+  type: string;       
+  mimeType?: string; 
+  url: string;
+  extension: string;
+  size: number;
+  users: string[];
+  folderId?: string;
+}
+interface fileProp {
+  file:FileDocument
 }
 
 
-const ImageThumbnail = ({ file }: FileDetailsProps) => {
+
+const ImageThumbnail = ({ file }: fileProp) => {
   return (
     <div className="flex flex-col items-center text-center mb-4">
       <Thumbnail
@@ -28,7 +38,7 @@ const ImageThumbnail = ({ file }: FileDetailsProps) => {
   );
 };
 
-const Delete = ({file}:FileDetailsProps) => {
+const Delete = ({file}:fileProp) => {
   return (
     <>
     <div>

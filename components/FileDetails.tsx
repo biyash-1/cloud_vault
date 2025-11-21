@@ -2,8 +2,22 @@ import { Models } from "node-appwrite";
 import React from "react";
 import Thumbnail from "./Thumbnail";
 
+export interface FileDocument extends Models.Document {
+  name: string;
+  type: string;   
+  fullName: string;    
+  mimeType?: string; 
+  owner: string;
+  url: string;
+  extension: string;
+  size: number;
+  users?: string[];
+  folderId?: string;
+  ownerName?: string;
+}
+
 interface FileDetailsProps {
-  file: Models.Document;
+  file: FileDocument;
 }
 
 const ImageThumbnail = ({ file }: FileDetailsProps) => {
@@ -54,7 +68,7 @@ const FileDetails = ({ file }: FileDetailsProps) => {
         />
         <DetailRow
           label="Owner"
-          value={file.owner?.fullName || file.ownerName || "Unknown"}
+          value={ file.ownerName || "Unknown"}
         />
         <DetailRow
           label="Last Edit"

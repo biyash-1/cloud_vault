@@ -57,7 +57,8 @@ const ActionDropDown = ({ file }: ActionDropDownProps) => {
   const [isRemovingUser, setIsRemovingUser] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false); // Add this state
   const path = usePathname();
-  const type = path.split("/").pop(); 
+const pathSegments = path.split("/");
+const type = pathSegments[pathSegments.length - 1] || 'files';
 
   const actionItems = [
     {
@@ -300,7 +301,7 @@ const ActionDropDown = ({ file }: ActionDropDownProps) => {
             ) : (
               <DropdownMenuItem
                 key={item.value}
-                onClick={() => handleActionClick(item.value)}
+                onClick={() => handleActionClick(item.value as ActionType)}
               >
                 {item.icon}
                 {item.label}

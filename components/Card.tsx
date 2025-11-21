@@ -6,8 +6,22 @@ import ActionDropDown from './ActionDropDown';
 interface CardProps {
   file: Models.Document;
 }
+export interface FileDocument extends Models.Document {
+  name: string;
+  type: string;       
+  mimeType?: string; 
+  url: string;
+  extension: string;
+  size: number;
+  users?: string[];
+  folderId?: string;
+  ownerName?: string;
+}
+interface FileProps {
+  file: FileDocument;
+}
 
-const FileCard = ({ file }: CardProps) => {
+const FileCard = ({ file }: FileProps) => {
   return (
     <div className="relative flex flex-col p-6 px-2 bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg  min-h-[130px]">
       

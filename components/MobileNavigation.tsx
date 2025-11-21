@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import FileUploader from "./FileUploader";
@@ -26,8 +26,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { logoutUser } from "@/app/actions/user.action";
 
+
 const MobileNavigation = ({userId,accountId}:{userId:string,accountId:string}) => {
   const pathname = usePathname();
+  const path = pathname?.split("/").pop() || "files";
+  
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const navItems = [
@@ -125,7 +128,7 @@ const MobileNavigation = ({userId,accountId}:{userId:string,accountId:string}) =
               
               <div className="flex gap-2">
              <div>
-              <FileUploader ownerId={userId} accountId={accountId} />
+              <FileUploader path= {path} ownerId={userId} accountId={accountId} />
              </div>
             
                 <Button

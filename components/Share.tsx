@@ -21,6 +21,7 @@ interface Props {
   file: FileDocument;
   onInputChange: React.Dispatch<React.SetStateAction<string[]>>;
   onRemove: (email: string) => void;
+  loading?: boolean;
 }
 
 interface FileDetailsProps {

@@ -23,7 +23,7 @@ interface RenRenameFilePropsme {
   fileId: string;
   name: string;
   extension: string;
-  path: string;
+  path?: string;
   emails?: string[];  
 }
 
@@ -50,6 +50,12 @@ export type FolderDocument = Models.Document & { name: string };
 export type FolderListResponse = Models.DocumentList<FolderDocument> & {
   documents: FolderDocument[];
 };
+interface UpdateFileUsersProps {
+  fileId: string;
+  emails: string[];
+  path?: string;
+}
+
 
 export type FileDocument = Models.Document & {
   name: string;
@@ -58,6 +64,7 @@ export type FileDocument = Models.Document & {
   url: string;
   extension: string;
   owner: string;
+  users?: string[];
   folderId?: string;
 };
 
@@ -288,7 +295,7 @@ export const updateFileUsers = async ({
   fileId,
   emails,
   path,
-}: RenRenameFilePropsme) => {
+}: UpdateFileUsersProps) => {
   const { databases } = await createAdminClient();
 
   try {
@@ -538,6 +545,7 @@ export const getFolders = async (type: string): Promise<FolderListResponse> => {
 export const moveFile = async ({
   fileId,
   destinationFolderId,
+  
 }: {
   fileId: string;
   destinationFolderId: string;

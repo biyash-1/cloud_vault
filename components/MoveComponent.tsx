@@ -47,7 +47,7 @@ const MoveComponent = ({ file, type, onClose }: MoveComponentProps) => {
       await moveFile({
         fileId: file.$id,
         destinationFolderId: selectedFolderId,
-        path: pathname, // revalidate / refresh path on server
+ 
       });
 
       toast.success("File moved successfully");
