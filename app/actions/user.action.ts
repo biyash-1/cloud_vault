@@ -100,7 +100,7 @@ export const verifySecret = async ({
 
 
 export const logoutUser = async () => {
-  const { account } = createSessionedClient();
+  const { account } = await createSessionedClient();
   try {
     // Delete session from Appwrite
     await account.deleteSession("current");

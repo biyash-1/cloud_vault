@@ -27,14 +27,15 @@ export default function Header({ userId, accountId }: { userId: string; accountI
         <div className="flex items-center gap-3">
           <FileUploader ownerId={userId} accountId={accountId} />
 
-          <button
-            onClick={handleLogout}
-            disabled={isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
-          >
-            <LogOut className="h-4 w-4" />
-            {isPending ? "Logging out..." : "Logout"}
-          </button>
+     <button
+  onClick={handleLogout}
+  disabled={isPending}
+  className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition w-[120px]"
+>
+  <LogOut className="h-4 w-4" />
+  {isPending ? "Logging out..." : "Logout"}
+</button>
+
         </div>
       </div>
 
