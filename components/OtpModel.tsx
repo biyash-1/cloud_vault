@@ -25,18 +25,14 @@ const OtpModel = ({ accountId, email }: { accountId: string; email: string }) =>
   const [isOpen, setIsOpen] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
   const [otp, setOtp] = React.useState("");
-
   const router = useRouter();
 
   const handleSubmit = async (e: React.MouseEvent) => {
     e.preventDefault();
     try {
       setIsLoading(true);
-
-   ``
       await verifySecret({ accountId, password: otp });
-         router.push("/dashboard");
-  
+      router.push("/dashboard");
     } catch (error) {
       console.error("OTP verification failed:", error);
       alert("Invalid or expired OTP. Please try again.");
@@ -47,7 +43,7 @@ const OtpModel = ({ accountId, email }: { accountId: string; email: string }) =>
 
   const handleResend = async () => {
     try {
-      await sendEmailOTP({ email }); // ✅ also needs object with key
+      await sendEmailOTP({ email });
       alert("A new OTP has been sent to your email.");
     } catch {
       alert("Failed to resend OTP. Please try again later.");
@@ -73,7 +69,12 @@ const OtpModel = ({ accountId, email }: { accountId: string; email: string }) =>
         </AlertDialogHeader>
 
         <div className="flex justify-center mt-6">
-          <InputOTP maxLength={6} value={otp} onChange={(value) => setOtp(value)}>
+          <InputOTP 
+            autoFocus
+            maxLength={6} 
+            value={otp} 
+            onChange={(value) => setOtp(value)}
+          >
             <InputOTPGroup className="flex gap-2">
               {[0, 1, 2].map((i) => (
                 <InputOTPSlot
@@ -109,7 +110,7 @@ const OtpModel = ({ accountId, email }: { accountId: string; email: string }) =>
             </AlertDialogAction>
 
             <div className="flex items-center justify-center gap-1 text-sm text-gray-600">
-              <span>Didn’t get a code?</span>
+              <span>Didn't get a code?</span>
               <Button
                 variant="link"
                 className="text-amber-600 hover:text-amber-700 p-0 h-auto"

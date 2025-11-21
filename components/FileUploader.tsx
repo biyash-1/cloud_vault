@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { convertFileToUrl, getFileType, cn } from "@/lib/utils";
 import Thumbnail from "@/components/Thumbnail";
 import { CiCircleRemove } from "react-icons/ci";
-import { AiOutlineUpload, AiOutlineFileAdd } from "react-icons/ai";
+import {  AiOutlineFileAdd } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { motion, AnimatePresence } from "framer-motion";
 import { uploadFile } from "@/app/actions/file.action";

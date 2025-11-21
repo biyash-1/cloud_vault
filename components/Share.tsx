@@ -58,6 +58,9 @@ const Share = ({ file, onInputChange, onRemove }: Props) => {
           </div>
 
           <ul className="pt-2 border rounded-xl divide-y">
+            {file.users.length === 0 && (
+              <p className="text-sm text-gray-500 p-2">No users shared yet.</p>
+            )}
             {file?.users?.map((email: any) => (
               <li
                 key={email}
@@ -65,7 +68,7 @@ const Share = ({ file, onInputChange, onRemove }: Props) => {
               >
                 <p className="text-sm truncate">{email}</p>
                 <TiDelete
-                  size={22} // 👈 make it bigger
+                  size={26} 
                   className="text-red-500 hover:text-red-600 cursor-pointer"
                   onClick={() => onRemove(email)}
                 />

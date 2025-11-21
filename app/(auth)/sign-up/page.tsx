@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { createAccount } from "@/app/actions/user.action";
 import OtpModel from "@/components/OtpModel";
+import toast from "react-hot-toast";
 
 export default function SignupPage() {
   const [accountId, setAccountId] = useState<string | null>(null);
@@ -17,7 +18,7 @@ export default function SignupPage() {
     const password = (form.elements.namedItem("password") as HTMLInputElement).value;
 
     try {
-      // ✅ createAccount expects an object
+  
       const accountId = await createAccount({ fullName, email: emailValue });
 
       if (!accountId) throw new Error("Failed to create account.");
@@ -26,9 +27,8 @@ export default function SignupPage() {
       setEmail(emailValue);
 
       alert("Signup successful! Please check your email for OTP verification.");
-    } catch (error) {
-      console.error("Error creating account:", error);
-      alert("Failed to create account. Please try again.");
+    } catch (error:any) {
+      toast.error(error.message)
     }
   };
 
@@ -84,18 +84,17 @@ export default function SignupPage() {
 
         <button
           type="submit"
-          className="mt-4 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-lg transition-all"
+          className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg transition-all"
         >
           Sign Up
         </button>
       </form>
 
-      {/* ✅ Show OTP modal once accountId is available */}
       {accountId && <OtpModel email={email} accountId={accountId} />}
 
       <p className="text-sm text-center text-gray-600 mt-6">
         Already have an account?{" "}
-        <a href="/sign-in" className="text-amber-600 font-medium hover:underline">
+        <a href="/sign-in" className="text-blue-600 font-medium hover:underline">
           Log in
         </a>
       </p>

@@ -20,14 +20,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
       <section className="flex flex-1 flex-col">
         <div className="sticky top-0 z-50 md:hidden">
-          <MobileNavigation />
+          <MobileNavigation userId = {currentUser.$id} accountId= {currentUser.accountId} />
         </div>
 
         <header className="sticky top-0 z-50 hidden md:block bg-white shadow-sm border-b border-gray-100">
           <Header userId = {currentUser.$id} accountId ={currentUser.accountId} />
         </header>
 
-        <div className="flex-1 overflow-y-auto p-6">{children}</div>
+        <div className="flex-1 overflow-hidden py-2 ">{children}</div>
       </section>
     </main>
   );

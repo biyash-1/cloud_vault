@@ -6,6 +6,9 @@ import {
   Image,
   PlaySquare,
   MoreHorizontal,
+  Settings,
+  LogOut,
+  Cloud,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -24,7 +27,7 @@ const Sidebar = ({ user }: SidebarProps) => {
     { name: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
     { name: "Documents", icon: FileText, href: "/dashboard/documents" },
     { name: "Images", icon: Image, href: "/dashboard/images" },
-    { name: "media", icon: PlaySquare, href: "/dashboard/media" },
+    { name: "Media", icon: PlaySquare, href: "/dashboard/media" },
     { name: "Others", icon: MoreHorizontal, href: "/dashboard/others" },
   ];
 
@@ -32,18 +35,24 @@ const Sidebar = ({ user }: SidebarProps) => {
   const email = user?.email || "guest@example.com";
 
   return (
-    <aside className="hidden sm:flex flex-col h-screen bg-white border-r border-gray-200 shadow-sm transition-all duration-300 w-16 md:w-64">
-      {/* Logo */}
-      <div className="flex items-center justify-center md:justify-start h-16 border-b border-gray-200 px-2 md:px-4">
-        <h1 className="text-lg md:text-2xl font-semibold tracking-wide">
-          <span className="text-orange-500">C</span>
-          <span className="hidden md:inline text-orange-500">loud</span>
-          <span className="hidden md:inline text-gray-800">Vault</span>
-        </h1>
+    <aside className="hidden sm:flex flex-col h-screen bg-gradient-to-b from-slate-50 to-white border-r border-slate-200 shadow-lg transition-all duration-300 w-16 lg:w-64 group hover:shadow-xl">
+      {/* Logo Section - Enhanced */}
+      <div className="flex items-center justify-center lg:justify-start h-20 border-b border-slate-200/60 px-4 bg-white/50 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <Cloud className="w-6 h-6 text-white" />
+          </div>
+          <div className="hidden lg:block">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              CloudVault
+            </h1>
+            <p className="text-xs text-slate-500 -mt-1">Secure Storage</p>
+          </div>
+        </div>
       </div>
 
-      {/* Nav Items */}
-      <nav className="flex-1 gap-4 px-1 md:px-4 py-6 space-y-5">
+      {/* Navigation Section */}
+      <nav className="flex-1 px-3 py-6 space-y-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -51,37 +60,64 @@ const Sidebar = ({ user }: SidebarProps) => {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center justify-center md:justify-start gap-0 md:gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center justify-center lg:justify-start gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-300 group/nav ${
                 isActive
-                  ? "bg-orange-500 text-white"
-                  : "text-gray-700 hover:bg-orange-100 hover:text-orange-600"
+                  ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 transform scale-105"
+                  : "text-slate-600 hover:bg-white hover:text-slate-800 hover:shadow-md border border-transparent hover:border-slate-200"
               }`}
             >
               <Icon
                 size={20}
-                className={`${
-                  isActive ? "text-white" : "text-gray-500"
-                } transition-colors`}
+                className={`transition-all duration-300 ${
+                  isActive 
+                    ? "text-white scale-110" 
+                    : "text-slate-400 group-hover/nav:text-indigo-500"
+                }`}
               />
-              <span className="hidden md:inline">{item.name}</span>
+              <span className="hidden lg:inline font-medium">{item.name}</span>
+              {isActive && (
+                <div className="hidden lg:block ml-auto w-2 h-2 bg-white rounded-full"></div>
+              )}
             </Link>
           );
         })}
       </nav>
 
-      {/* User Profile */}
-      <div className="flex items-center gap-3 px-4 py-3 mt-auto mb-6 bg-gray-50 rounded-lg mx-2 hover:bg-gray-100 transition-colors cursor-pointer">
-        <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-lg">
-          {fullName.charAt(0).toUpperCase()}
+      {/* Storage Progress Bar */}
+    
+
+      {/* User Profile - Enhanced */}
+      <div className="flex items-center gap-3 p-2 mt-auto bg-white/80 backdrop-blur-sm border-t border-slate-200/60 hover:bg-white transition-all duration-300 cursor-pointer group/profile">
+        <div className="relative">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover/profile:shadow-xl transition-all duration-300">
+            {fullName.charAt(0).toUpperCase()}
+          </div>
+          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
         </div>
-        <div className="flex flex-col">
-          <span className="font-medium text-gray-800 truncate">{fullName}</span>
-          <span className="text-xs text-gray-500 truncate">{email}</span>
+        <div className="hidden lg:block flex-1 min-w-0">
+          <span className="font-semibold text-slate-800 block truncate">{fullName}</span>
+          <span className="text-xs text-slate-500 block truncate">{email}</span>
+        </div>
+        <div className="hidden lg:flex items-center gap-1 opacity-0 group-hover/profile:opacity-100 transition-opacity duration-300">
+          <button className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors">
+            <Settings size={16} />
+          </button>
+          <button className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors">
+            <LogOut size={16} />
+          </button>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="hidden md:block p-4 border-t border-gray-200 text-xs text-gray-500 text-center">
+      <div className="hidden lg:block p-4 border-t border-slate-200/60 text-xs text-slate-500 text-center bg-white/50 backdrop-blur-sm">
+        <div className="flex items-center justify-center gap-2 mb-1">
+          <div className="flex gap-1">
+            <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-150"></div>
+            <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse delay-300"></div>
+          </div>
+          <span>All systems operational</span>
+        </div>
         © {new Date().getFullYear()} CloudVault
       </div>
     </aside>
