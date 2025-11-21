@@ -1,5 +1,4 @@
 "use server";
-
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import MobileNavigation from "@/components/MobileNavigation";
@@ -11,12 +10,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    redirect("/sign-in"); // Redirect if not logged in
+    redirect("/sign-in");
   }
 
   return (
     <main className="min-h-screen flex bg-gradient-to-br from-amber-50 to-white">
-      <Sidebar user={currentUser} />
+      <Sidebar user={{ username: currentUser.username, email: currentUser.email }} />
 
       <section className="flex flex-1 flex-col">
         <div className="sticky top-0 z-50 md:hidden">
