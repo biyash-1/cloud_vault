@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getFiles, getFolders } from "@/app/actions/file.action";
 import Card from "@/components/Card";
 import { getFileTypeParams, convertFileSize } from "@/lib/utils";
