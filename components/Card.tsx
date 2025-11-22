@@ -40,9 +40,7 @@ const FileCard = ({ file }: FileProps) => {
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
             {file.type} • {formatSize(file.size)}
           </p>
-          <p className='text-xs'>
-            {formatDateTime(file.$updatedAt)}
-          </p>
+         
         </div>
 
         {/* Dropdown */}
