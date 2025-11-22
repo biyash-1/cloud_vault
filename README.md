@@ -43,18 +43,23 @@ It’s fully deployed and free to use.
 📌 Installation & Setup (for local development)
 Clone the repository:
 
-```bash
 Copy code
+```bash
+
 git clone https://github.com/biyash-1/cloud_vault.git
 cd cloud_vault
 Install dependencies:
+```
 
-bash
 Copy code
+```bash
+
 npm install
+```
+
 Set up environment variables in .env.local:
 
-ini
+
 Copy code
 ```bash
 
@@ -68,7 +73,11 @@ Run the development server:
 
 bash
 Copy code
+```bash
+
 npm run dev
+```
+
 Open http://localhost:3000 to view your app.
 
 📝 Usage
