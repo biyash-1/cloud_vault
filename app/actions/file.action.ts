@@ -180,7 +180,7 @@ const createQueries = (
     console.log("✅ Filtering by folderId:", folderId);
     queries.push(Query.equal("folderId", folderId));
   } else {
-    // When folderId is null, we want files that don't belong to any folder
+    // When folderId is null
     console.log("✅ Filtering for root files (no folder)");
     queries.push(Query.isNull("folderId"));
   }
@@ -351,9 +351,7 @@ export const removeUser = async ({ fileId, email, path }: RemoveUserProps) => {
   }
 };
 
-// Add the missing interface
 
-// Remove unnecessary revalidate function as we're using revalidatePath
 
 
 export type CategoryKey = "image" | "document" | "video" | "audio" | "other";
@@ -392,7 +390,7 @@ export async function getTotalSpaceUsed(): Promise<TotalSpace> {
       all: 2 * 1024 * 1024 * 1024, // 2GB quota
     };
 
-    // Map Appwrite file types to category keys
+
     const categoryMap: Record<string, CategoryKey> = {
       image: "image",
       img: "image",
@@ -418,11 +416,11 @@ export async function getTotalSpaceUsed(): Promise<TotalSpace> {
       const fileType = (file.type || "other").toLowerCase();
       const key: CategoryKey = categoryMap[fileType] || "other";
 
-      // Accumulate size
+   
       totalSpace[key].size += file.size;
       totalSpace.used += file.size;
 
-      // Update latestDate
+  
       if (!totalSpace[key].latestDate || new Date(file.$updatedAt) > new Date(totalSpace[key].latestDate)) {
         totalSpace[key].latestDate = file.$updatedAt;
       }
@@ -470,7 +468,7 @@ export const createFolder = async ({ name, path }: { name: string, path?: string
       ID.unique(),
       {
         name,
-        type: path, // <— image / video / documents / media etc
+        type: path, 
         owner: currentUser.$id,
         ownerName: currentUser.username,
         accountId: currentUser.accountId,
@@ -478,7 +476,7 @@ export const createFolder = async ({ name, path }: { name: string, path?: string
       }
     );
 
-    // Fix path: must revalidate the route `/dashboard/{type}`
+  
     if (path) {
       revalidatePath(`/dashboard/${path}`);
     }
@@ -527,7 +525,7 @@ export const getFolders = async (type: string): Promise<FolderListResponse> => {
     // Map documents to FolderDocument type
     const folderDocs: FolderDocument[] = folders.documents.map((doc) => ({
       ...doc,
-      name: doc.name || "Untitled Folder", // Ensure `name` exists
+      name: doc.name || "Untitled Folder",
     }));
 
     return {

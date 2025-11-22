@@ -153,20 +153,31 @@ export const getCurrentUser = async () => {
 
 
 export const signInUser = async ({ email }: { email: string }) => {
-  const existingUser = await getUserByEmail(email);
+  try {
+    const existingUser = await getUserByEmail(email);
 
+    if (!existingUser) {
+      return {
+        success: false,
+        message: "This email is not registered.",
+      };
+    }
 
-  if (!existingUser) {
-    throw new Error("This email is not registered.");
+    // Send OTP
+    await sendEmailOTP({
+      email,
+      accountId: existingUser.accountId,
+    });
 
+    return {
+      success: true,
+      message: "OTP has been sent to your email.",
+      accountId: existingUser.accountId,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Something went wrong. Please try again.",
+    };
   }
-
- if(existingUser){
-
-   await sendEmailOTP({ email, accountId: existingUser.accountId });
- }
-
-  return existingUser.accountId;
 };
-
-

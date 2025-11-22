@@ -13,27 +13,20 @@ const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
   const form = e.currentTarget;
   const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
 
-  try {
-    const userId = await signInUser({ email });
+  // Call server action
+  const res = await signInUser({ email });
 
-    setAccountId(userId);
-    setEmailState(email);
-
-    toast.success("OTP has been sent to your email!");
-  } catch (error: any) {
-    console.log("ERROR:", error.message);
-
-    // If backend sends custom error:
-    if (error?.message) {
-      toast.error(error.message);
-      return;
-    }
-
-    // fallback message
-    toast.error("Something went wrong.");
+  if (!res.success) {
+    // show error from backend
+    toast.error(res.message);
+    return;
   }
-};
 
+  // success
+  setAccountId(res.accountId);
+  setEmailState(email);
+  toast.success(res.message);
+};
 
   return (
     <div className="bg-white border-gray-200 shadow-lg rounded-2xl w-full max-w-md p-10 mx-auto mt-20">
