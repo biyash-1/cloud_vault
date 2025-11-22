@@ -1,4 +1,4 @@
-loudVault 🌐☁️
+CloudVault 🌐☁️
 CloudVault is a secure, fast, and modern cloud storage platform built with Next.js and Appwrite. It allows users to store, manage, share, and access files from anywhere with a sleek, interactive, and mobile-responsive interface.
 
 🚀 Features
@@ -56,11 +56,15 @@ Set up environment variables in .env.local:
 
 ini
 Copy code
+```bash
+
 NEXT_PUBLIC_APPWRITE_ENDPOINT=<your_appwrite_endpoint>
 NEXT_PUBLIC_APPWRITE_PROJECT=<your_appwrite_project_id>
 NEXT_PUBLIC_APPWRITE_DATABASE_ID=<your_database_id>
 NEXT_PUBLIC_APPWRITE_BUCKET_ID=<your_storage_bucket_id>
 Run the development server:
+```
+
 
 bash
 Copy code
