@@ -1,6 +1,7 @@
 import { Models } from "node-appwrite";
 import React from "react";
 import Thumbnail from "./Thumbnail";
+import { formatDateTime } from "@/lib/utils";
 
 export interface FileDocument extends Models.Document {
   name: string;
@@ -72,7 +73,7 @@ const FileDetails = ({ file }: FileDetailsProps) => {
         />
         <DetailRow
           label="Last Edit"
-          value={new Date(file.$updatedAt).toLocaleString()}
+          value={formatDateTime(file.$updatedAt)}
         />
       </div>
     </div>

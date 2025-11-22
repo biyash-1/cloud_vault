@@ -2,6 +2,7 @@ import React from 'react';
 import { Models } from 'node-appwrite';
 import Thumbnail from './Thumbnail';
 import ActionDropDown from './ActionDropDown';
+import { formatDateTime } from '@/lib/utils';
 
 interface CardProps {
   file: Models.Document;
@@ -38,6 +39,9 @@ const FileCard = ({ file }: FileProps) => {
           </h2>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
             {file.type} • {formatSize(file.size)}
+          </p>
+          <p>
+            {formatDateTime(file.$updatedAt)}
           </p>
         </div>
 

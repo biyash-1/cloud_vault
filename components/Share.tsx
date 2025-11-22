@@ -4,6 +4,7 @@ import { Input } from "./ui/input";
 import React from "react";
 import { Button } from "./ui/button";
 import { TiDelete } from "react-icons/ti";
+import { formatDateTime } from "@/lib/utils";
 
 // Define a proper type for your file
 export interface FileDocument extends Models.Document {
@@ -41,7 +42,7 @@ const ImageThumbnail = ({ file }: FileDetailsProps) => {
           {file.name}
         </p>
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          {new Date(file.$createdAt).toLocaleString()}
+          {formatDateTime(file.$createdAt)}
         </p>
       </div>
     </div>
