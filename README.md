@@ -17,8 +17,14 @@ CloudVault is a secure, fast, and modern cloud storage platform built with Next.
 🎯 Goal
 To build a secure, efficient, and user-friendly cloud storage platform that allows users to manage their files effortlessly, with a modern and responsive design.
 
-🛠️ Tech Stack
-Frontend: Next.js, TypeScript, Tailwind CSS
+## 🛠️ Tech Stack
+
+| Layer      | Technology / Tools                     |
+|-----------|----------------------------------------|
+| Frontend   | Next.js, TypeScript, Tailwind CSS      |
+| Backend    | Appwrite (Database, Storage, Auth, OTP)|
+| Deployment | Vercel                                  |
+
 
 Backend: Appwrite (Database, Storage, Auth, OTP)
 
