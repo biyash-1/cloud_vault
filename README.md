@@ -43,7 +43,7 @@ It’s fully deployed and free to use.
 📌 Installation & Setup (for local development)
 Clone the repository:
 
-bash
+```bash
 Copy code
 git clone https://github.com/biyash-1/cloud_vault.git
 cd cloud_vault
