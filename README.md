@@ -2,21 +2,17 @@ CloudVault 🌐☁️
 CloudVault is a secure, fast, and modern cloud storage platform built with Next.js and Appwrite. It allows users to store, manage, share, and access files from anywhere with a sleek, interactive, and mobile-responsive interface.
 
 🚀 Features
-Upload & Manage Files – Images, videos, documents, and more
+| Feature                    | Description                                |
+|----------------------------|--------------------------------------------|
+| Upload & Manage Files      | Images, videos, documents, and more       |
+| Folder System              | Create folders and organize files easily  |
+| Share Files                | Easily share files with others            |
+| Edit & Delete              | Rename, move, delete files                |
+| Download Files             | Secure and fast file downloads            |
+| Secure Authentication      | OTP login for safe access                  |
+| Interactive Dashboard      | Clean, responsive, mobile-friendly UI     |
+| Backend Powered by Appwrite| Handles DB, storage, and authentication   |
 
-Folder System – Create folders and organize files effortlessly
-
-Share Files – Easily share files with others
-
-Edit & Delete – Rename, move, delete files
-
-Download Files – Secure and fast file downloads
-
-Secure Authentication – OTP login for safe access
-
-Interactive Dashboard – Clean, responsive, and mobile-friendly UI
-
-Backend Powered by Appwrite – Handles DB, storage, and authentication
 
 🎯 Goal
 To build a secure, efficient, and user-friendly cloud storage platform that allows users to manage their files effortlessly, with a modern and responsive design.
