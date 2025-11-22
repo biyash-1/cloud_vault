@@ -20,6 +20,7 @@ import { RxCross2 } from "react-icons/rx";
 import { Button } from "./ui/button";
 import { sendEmailOTP, verifySecret } from "@/app/actions/user.action";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const OtpModel = ({ accountId, email }: { accountId: string; email: string }) => {
   const [isOpen, setIsOpen] = React.useState(true);
@@ -33,6 +34,7 @@ const OtpModel = ({ accountId, email }: { accountId: string; email: string }) =>
       setIsLoading(true);
       await verifySecret({ accountId, password: otp });
       router.push("/dashboard");
+      toast.success("Welcome back sir!");
     } catch (error) {
       console.error("OTP verification failed:", error);
       alert("Invalid or expired OTP. Please try again.");

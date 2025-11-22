@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 
 import { redirect } from "next/navigation";
 
-// 🔹 Get user by emailpo
+// Get user by email
 export const getUserByEmail = async (email: string) => {
   const { databases } = createAdminClient();
 
@@ -25,7 +25,7 @@ export const getUserByEmail = async (email: string) => {
   const { account } = await createAdminClient();
 
   try {
-    const id = accountId || ID.unique(); // reuse existing user if available
+    const id = accountId || ID.unique(); 
     const session = await account.createEmailToken(id, email);
     return session.userId;
   } catch (error) {
@@ -114,8 +114,8 @@ export const logoutUser = async () => {
       httpOnly: true,
       sameSite: "strict",
       secure: true,
-      expires: new Date(0), // Immediate expiration
-      maxAge: 0, // Immediate expiration
+      expires: new Date(0), 
+      maxAge: 0, 
     });
     
     redirect("/sign-in");
@@ -123,17 +123,17 @@ export const logoutUser = async () => {
 };
 export const getCurrentUser = async () => {
   try {
-    // 1️⃣ Get user session from cookie
+    //  Get user session from cookie
     const sessionedClient = await createSessionedClient().catch(() => null);
     if (!sessionedClient) return null;
     
     const { account } = sessionedClient;
     
-    // 2️⃣ Get logged-in Appwrite account info
+    //  Get logged-in Appwrite account info
     const sessionUser = await account.get().catch(() => null);
     if (!sessionUser) return null;
     
-    // 3️⃣ Use admin client to fetch user record from your database
+    //  Use admin client to fetch user record from your database
     const { databases } = createAdminClient();
     const userQuery = await databases.listDocuments(
       appwriteConfig.databaseId,
@@ -170,40 +170,3 @@ export const signInUser = async ({ email }: { email: string }) => {
 };
 
 
-// export async function signInUser({ email }: { email: string }) {
-//   const { databases } = await createAdminClient();
-
-//   // 1. Validate email
-//   if (!email || !email.includes("@")) {
-//     throw { code: "INVALID_EMAIL", message: "Invalid email format" };
-//   }
-
-//   try {
-//     // 2. Find user by email
-//     const users = await databases.listDocuments(
-//       appwriteConfig.databaseId,
-//       appwriteConfig.usersCollectionId,
-//       [Query.equal("email", email)]
-//     );
-
-//     // 3. If not found → throw message
-//     if (users.total === 0) {
-//       throw { code: "EMAIL_NOT_REGISTERED", message: "Email is not registered yet" };
-//     }
-
-//     const user = users.documents[0];
-
-//     // 4. Send OTP
-//     await sendEmailOTP({
-//       email,
-//     accountId: user.$id
-// // IMPORTANT FIX
-//     });
-
-//     // 5. Return user ID
-//     return user.$id;
-
-//   } catch (error: any) {
-//     throw error;
-//   }
-// }
