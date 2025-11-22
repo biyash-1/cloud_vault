@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+loudVault 🌐☁️
+CloudVault is a secure, fast, and modern cloud storage platform built with Next.js and Appwrite. It allows users to store, manage, share, and access files from anywhere with a sleek, interactive, and mobile-responsive interface.
 
-## Getting Started
+🚀 Features
+Upload & Manage Files – Images, videos, documents, and more
 
-First, run the development server:
+Folder System – Create folders and organize files effortlessly
 
-```bash
+Share Files – Easily share files with others
+
+Edit & Delete – Rename, move, delete files
+
+Download Files – Secure and fast file downloads
+
+Secure Authentication – OTP login for safe access
+
+Interactive Dashboard – Clean, responsive, and mobile-friendly UI
+
+Backend Powered by Appwrite – Handles DB, storage, and authentication
+
+🎯 Goal
+To build a secure, efficient, and user-friendly cloud storage platform that allows users to manage their files effortlessly, with a modern and responsive design.
+
+🛠️ Tech Stack
+Frontend: Next.js, TypeScript, Tailwind CSS
+
+Backend: Appwrite (Database, Storage, Auth, OTP)
+
+Deployment: Vercel
+
+📁 Project Structure
+bash
+Copy code
+/app                # Next.js pages and components
+/components         # Reusable UI components
+/lib                # Utility functions
+/appwrite           # Appwrite client setup
+/public             # Static assets
+⚡ Live Demo
+Try the platform live: CloudVault Demo
+It’s fully deployed and free to use.
+
+📌 Installation & Setup (for local development)
+Clone the repository:
+
+bash
+Copy code
+git clone https://github.com/biyash-1/cloud_vault.git
+cd cloud_vault
+Install dependencies:
+
+bash
+Copy code
+npm install
+Set up environment variables in .env.local:
+
+ini
+Copy code
+NEXT_PUBLIC_APPWRITE_ENDPOINT=<your_appwrite_endpoint>
+NEXT_PUBLIC_APPWRITE_PROJECT=<your_appwrite_project_id>
+NEXT_PUBLIC_APPWRITE_DATABASE_ID=<your_database_id>
+NEXT_PUBLIC_APPWRITE_BUCKET_ID=<your_storage_bucket_id>
+Run the development server:
+
+bash
+Copy code
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Open http://localhost:3000 to view your app.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📝 Usage
+Login with your email (OTP login)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Upload files (images, videos, documents)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create folders and move files into them
 
-## Learn More
+Share, edit, download, or delete files
 
-To learn more about Next.js, take a look at the following resources:
+Use the responsive dashboard on desktop or mobile
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+🔒 Security
+Uses Appwrite Authentication with OTP login
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+All files are securely stored in Appwrite Storage
 
-## Deploy on Vercel
+User data is managed safely in Appwrite Database
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+📂 Contributing
+Contributions are welcome! If you want to improve CloudVault:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Fork the repository
+
+Create a new branch: git checkout -b feature/your-feature
+
+Commit your changes: git commit -m "Add your feature"
+
+Push to the branch: git push origin feature/your-feature
+
+Open a Pull Request
+
+📜 License
+This project is MIT licensed.
+
+🙌 Connect
+GitHub: biyash-1/cloud_vault
+
+Live Demo: cloud-vault-omega-dun.vercel.app
