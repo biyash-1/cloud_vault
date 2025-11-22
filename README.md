@@ -28,14 +28,12 @@ Backend: Appwrite (Database, Storage, Auth, OTP)
 
 Deployment: Vercel
 
-📁 Project Structure
-bash
-Copy code
 /app                # Next.js pages and components
 /components         # Reusable UI components
 /lib                # Utility functions
 /appwrite           # Appwrite client setup
 /public             # Static assets
+
 ⚡ Live Demo
 Try the platform live: CloudVault Demo
 It’s fully deployed and free to use.
