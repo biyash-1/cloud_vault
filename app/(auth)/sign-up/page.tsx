@@ -9,28 +9,29 @@ export default function SignupPage() {
   const [accountId, setAccountId] = useState<string | null>(null);
   const [email, setEmail] = useState<string>("");
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    const form = e.currentTarget;
-    const fullName = (form.elements.namedItem("name") as HTMLInputElement).value;
-    const emailValue = (form.elements.namedItem("email") as HTMLInputElement).value;
-    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+  const form = e.currentTarget;
+  const fullName = (form.elements.namedItem("name") as HTMLInputElement).value;
+  const emailValue = (form.elements.namedItem("email") as HTMLInputElement).value;
+  const password = (form.elements.namedItem("password") as HTMLInputElement).value;
 
-    try {
-  
-      const accountId = await createAccount({ fullName, email: emailValue });
+  try {
+    const accountId = await createAccount({ fullName, email: emailValue });
 
-      if (!accountId) throw new Error("Failed to create account.");
+    if (!accountId) throw new Error("Failed to create account.");
 
-      setAccountId(accountId); // ✅ set accountId for OTP modal
-      setEmail(emailValue);
+    setAccountId(accountId); // ✅ for OTP modal
+    setEmail(emailValue);
 
-      alert("Signup successful! Please check your email for OTP verification.");
-    } catch (error:any) {
-      toast.error(error.message)
-    }
-  };
+    toast.success("Signup successful! Please check your email for OTP verification.");
+  } catch (error: any) {
+    // Display backend error in toast
+    toast.error(error.message || "Something went wrong. Please try again.");
+  }
+};
+
 
   return (
     <div className="bg-white border border-gray-200 shadow-lg rounded-2xl w-full max-w-md p-10">
