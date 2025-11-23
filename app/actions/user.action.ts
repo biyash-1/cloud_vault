@@ -42,12 +42,20 @@ export const createAccount = async ({
   fullName: string;
   email: string;
 }) => {
+
+  // ---------- EMAIL VALIDATION ----------
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!email || !emailRegex.test(email)) {
+    throw new Error("Invalid email format. Please enter a valid email.");
+  }
+  // --------------------------------------
+
   const existingUser = await getUserByEmail(email);
 
-    if (existingUser) {
+  if (existingUser) {
     throw new Error("Email already registered. Please log in instead.");
   }
-
 
   const accountId = await sendEmailOTP({ email });
   if (!accountId) throw new Error("Failed to send an OTP");
@@ -60,15 +68,15 @@ export const createAccount = async ({
       appwriteConfig.usersCollectionId,
       ID.unique(),
       {
-        username:fullName,
+        username: fullName,
         email,
         Avatar: null,
         accountId,
-      },
+      }
     );
   }
 
-  return accountId
+  return accountId;
 };
 
 
@@ -169,7 +177,7 @@ export const signInUser = async ({ email }: { email: string }) => {
       accountId: existingUser.accountId,
     });
 
-    return {
+    return {                                                                                                        
       success: true,
       message: "OTP has been sent to your email.",
       accountId: existingUser.accountId,

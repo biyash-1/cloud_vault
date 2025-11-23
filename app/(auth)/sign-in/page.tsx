@@ -19,7 +19,7 @@ const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
   if (!res.success) {
     // show error from backend
     toast.error(res.message);
-    return;
+    return;                          
   }
 
   // success
