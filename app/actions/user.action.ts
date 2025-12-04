@@ -43,7 +43,6 @@ export const createAccount = async ({
   email: string;
 }) => {
 
-  // ---------- EMAIL VALIDATION ----------
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!email || !emailRegex.test(email)) {
