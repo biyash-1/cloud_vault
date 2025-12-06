@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Run ESLint
-        run: npm run lint
+        run: node --loader esm node_modules/.bin/eslint . --ext .ts,.tsx
 
       - name: TypeScript type check
         run: npm run type-check
