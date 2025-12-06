@@ -145,7 +145,7 @@ export default function HomePage() {
                   size="lg"
                   className="w-full sm:w-auto border-2 border-slate-300 text-slate-700 hover:bg-white hover:border-indigo-300 text-lg px-8 py-3 h-14 backdrop-blur-sm"
                 >
-                  Learn More
+                  Learn More 
                 </Button>
               </Link>
             </div>
