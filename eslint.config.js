@@ -1,31 +1,41 @@
+// eslint.config.js
 import js from "@eslint/js";
 import { defineFlatConfig } from "eslint-define-config";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
 
 export default defineFlatConfig([
   {
     ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
+
   js.configs.recommended,
-  ...["plugin:@typescript-eslint/recommended"].map(config => require(config)),
+
+  // TS recommended config (ESM)
+  {
+    ...tsPlugin.configs.recommended,
+  },
+
   {
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      parser: require("@typescript-eslint/parser"),
+      parser: tsParser,
       parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
+        ecmaFeatures: { jsx: true },
       },
     },
+
     plugins: {
-      "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
+      "@typescript-eslint": tsPlugin,
     },
+
     settings: {
       react: {
         version: "detect",
       },
     },
+
     rules: {
       "react/react-in-jsx-scope": "off",
     },
