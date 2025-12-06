@@ -1,63 +1,47 @@
-// eslint.config.js
+// @ts-check
+
 import js from "@eslint/js";
-import { defineFlatConfig } from "eslint-define-config";
-import tsParser from "@typescript-eslint/parser";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
+import tseslint from "typescript-eslint";
+import reactPlugin from "eslint-plugin-react";
+import nextPlugin from "@next/eslint-plugin-next";
+import globals from "globals";
 
-export default defineFlatConfig([
-  {
-    ignores: ["node_modules/**", ".next/**", "out/**", "build/**"],
-  },
-
+export default [
+  // Base JS rules
   js.configs.recommended,
 
+  // TypeScript rules
+  ...tseslint.configs.recommended,
+
+  // React rules
+  reactPlugin.configs.flat.recommended,
+
+  // Next.js rules
+  nextPlugin.configs.recommended,
+
   {
-    files: ["**/*.ts", "**/*.tsx"],
+    files: ["**/*.{ts,tsx}"],
+
     languageOptions: {
-      parser: tsParser,
-      ecmaVersion: "latest",
-      sourceType: "module",
+      parser: tseslint.parser,
       parserOptions: {
-        ecmaFeatures: { jsx: true },
+        project: "./tsconfig.json", // <---- REQUIRED for type-aware linting
       },
       globals: {
-        // Browser globals
-        window: "readonly",
-        document: "readonly",
-        File: "readonly",
-        URL: "readonly",
-        alert: "readonly",
-        HTMLFormElement: "readonly",
-        HTMLInputElement: "readonly",
-        HTMLDivElement: "readonly",
-
-        // Node globals
-        process: "readonly",
-        Buffer: "readonly",
-        console: "readonly",
-        setTimeout: "readonly",
-        clearTimeout: "readonly",
-        setInterval: "readonly",
-        clearInterval: "readonly",
-        NodeJS: "readonly",
+        ...globals.browser,
+        ...globals.node,
       },
     },
 
-    env: {
-      browser: true,
-      node: true,
-      es2024: true,
-    },
-
-    plugins: {
-      "@typescript-eslint": tsPlugin,
+    settings: {
+      react: {
+        version: "detect",
+      },
     },
 
     rules: {
-      ...tsPlugin.configs.recommended.rules, // NO TYPE CHECKING NEEDED
       "react/react-in-jsx-scope": "off",
-      "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/await-thenable": "error",
     },
   },
-]);
+];
