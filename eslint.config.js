@@ -1,19 +1,33 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import { defineFlatConfig } from "eslint-define-config";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({ 
-  baseDirectory: __dirname,
-  recommendedConfig: {},
-  allConfig: {}
-});
-
-export default [
+export default defineFlatConfig([
   {
     ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-];
+  js.configs.recommended,
+  ...["plugin:@typescript-eslint/recommended"].map(config => require(config)),
+  {
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parser: require("@typescript-eslint/parser"),
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+    rules: {
+      "react/react-in-jsx-scope": "off",
+    },
+  },
+]);
