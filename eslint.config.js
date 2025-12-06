@@ -13,28 +13,51 @@ export default defineFlatConfig([
 
   {
     files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parser: tsParser,
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+      },
+      globals: {
+        // Browser globals
+        window: "readonly",
+        document: "readonly",
+        File: "readonly",
+        URL: "readonly",
+        alert: "readonly",
+        HTMLFormElement: "readonly",
+        HTMLInputElement: "readonly",
+        HTMLDivElement: "readonly",
+
+        // Node globals
+        process: "readonly",
+        Buffer: "readonly",
+        console: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        NodeJS: "readonly",
+      },
+    },
+
+    env: {
+      browser: true,
+      node: true,
+      es2024: true,
+    },
+
     plugins: {
       "@typescript-eslint": tsPlugin,
     },
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: { jsx: true },
-      },
-    },
+
     rules: {
-      ...tsPlugin.configs.recommended.rules, // <<— FIXED (no type info required)
+      ...tsPlugin.configs.recommended.rules, // NO TYPE CHECKING NEEDED
+      "react/react-in-jsx-scope": "off",
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/no-explicit-any": "off",
-    },
-  },
-
-  {
-    files: ["**/*.tsx"],
-    rules: {
-      "react/react-in-jsx-scope": "off",
     },
   },
 ]);
